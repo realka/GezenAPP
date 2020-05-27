@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "62860383605",
+    "firebase_url": "https://gezanapp-52f50.firebaseio.com",
+    "project_id": "gezanapp-52f50",
+    "storage_bucket": "gezanapp-52f50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62860383605:android:ee585e61db31a040beaf3c",
+        "android_client_info": {
+          "package_name": "com.example.gezenapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62860383605-geg326o7kn5034dm8ch8t8hpu28siqa6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVMj7cUFqvMt43zBcxs54zZrq0JG_ost4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62860383605-geg326o7kn5034dm8ch8t8hpu28siqa6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
