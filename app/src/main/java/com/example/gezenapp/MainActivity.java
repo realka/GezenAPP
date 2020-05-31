@@ -58,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
                 if(mFirebaseUser != null)
                 {
-                    Toast.makeText(MainActivity.this,"Giriş başarili",Toast.LENGTH_LONG);
+                    Toast.makeText(MainActivity.this,"Giriş başarili",Toast.LENGTH_LONG).show();
                     Intent i = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(i);
                 }
                 else
                 {
-                    Toast.makeText(MainActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_LONG);
+                    Toast.makeText(MainActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_LONG).show();
                 }
             };
         };
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
-                            Toast.makeText(MainActivity.this,"Başarısız",Toast.LENGTH_LONG);
+                            Toast.makeText(MainActivity.this,"Başarısız",Toast.LENGTH_LONG).show();
                         }
                         else{
                             Intent iHome = new Intent(MainActivity.this,HomeActivity.class);

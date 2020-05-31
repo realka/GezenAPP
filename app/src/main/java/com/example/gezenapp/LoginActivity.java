@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (pwd.isEmpty() && email.isEmpty())
                 {
-                    Toast.makeText(LoginActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_LONG).show();
                 }
                 else if (!pwd.isEmpty() && !email.isEmpty())
                 {
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(!task.isSuccessful()){
-                                Toast.makeText(LoginActivity.this,"Hesap olusturma basarisiz.",Toast.LENGTH_LONG);
+                                Toast.makeText(LoginActivity.this,"Hesap olusturma basarisiz.",Toast.LENGTH_LONG).show();
                             }
                             else{
                                 Intent iHome = new Intent(LoginActivity.this,MainActivity.class);
@@ -79,13 +79,13 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
                 if(mFirebaseUser != null)
                 {
-                    Toast.makeText(LoginActivity.this,"Giriş başarili",Toast.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this,"Giriş başarili",Toast.LENGTH_LONG).show();
                     Intent i = new Intent(LoginActivity.this,MainActivity.class);
                     startActivity(i);
                 }
                 else
                 {
-                    Toast.makeText(LoginActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_LONG).show();
                 }
             };
         };
