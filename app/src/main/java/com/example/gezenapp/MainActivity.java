@@ -40,36 +40,17 @@ public class MainActivity extends AppCompatActivity {
         emailId = findViewById(R.id.username);
         password = findViewById(R.id.password);
         giris = findViewById(R.id.giris);
+
         kayit = findViewById(R.id.kayit);
 
         kayit.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
-                String email = emailId.getText().toString();
-                String pwd = password.getText().toString();
-
-                if (pwd.isEmpty() && email.isEmpty())
-                {
-                    Toast.makeText(MainActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_SHORT);
+                Intent iLogin = new Intent(MainActivity.this,LoginActivity.class);
+                startActivity(iLogin);
                 }
-                else if (!pwd.isEmpty() && !email.isEmpty())
-                {
-                    mFirebaseAuth.createUserWithEmailAndPassword(email,pwd).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(!task.isSuccessful()){
-                                Toast.makeText(MainActivity.this,"Hesap olusturma basarisiz.",Toast.LENGTH_SHORT);
-                            }
-                            else{
-                                Intent iHome = new Intent(MainActivity.this,HomeActivity.class);
-                                startActivity(iHome);
-                            }
-                        }
-                    });
-                }
-            }
         });
+
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener(){
             @Override
@@ -77,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
                 if(mFirebaseUser != null)
                 {
-                    Toast.makeText(MainActivity.this,"Giriş başarili",Toast.LENGTH_SHORT);
+                    Toast.makeText(MainActivity.this,"Giriş başarili",Toast.LENGTH_LONG);
                     Intent i = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(i);
                 }
                 else
                 {
-                    Toast.makeText(MainActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_SHORT);
+                    Toast.makeText(MainActivity.this,"Girilen bilgiler hatali",Toast.LENGTH_LONG);
                 }
             };
         };
@@ -99,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
-                            Toast.makeText(MainActivity.this,"Başarısız",Toast.LENGTH_SHORT);
+                            Toast.makeText(MainActivity.this,"Başarısız",Toast.LENGTH_LONG);
                         }
                         else{
                             Intent iHome = new Intent(MainActivity.this,HomeActivity.class);
