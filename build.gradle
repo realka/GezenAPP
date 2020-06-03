@@ -10,6 +10,7 @@ buildscript {
     }
     //apply plugin: 'com.android.application'
     dependencies {
+
         classpath 'com.android.tools.build:gradle:4.0.0'
 
         def nav_version = "2.3.0-beta01"
@@ -22,6 +23,8 @@ buildscript {
 
 
         classpath 'com.google.gms:google-services:4.3.3'
+
+
     }
 }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
+    ListView listView;
 
 
     Button cikis;
@@ -43,6 +45,8 @@ public class HomeActivity extends AppCompatActivity {
                 Log.w("TAG", "Failed to read value.", error.toException());
             }
         });
+
+
         cikis = findViewById(R.id.cikisyap);
         cikis.setOnClickListener(new View.OnClickListener() {
             @Override
