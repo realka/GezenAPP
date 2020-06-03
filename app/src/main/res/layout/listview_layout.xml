@@ -6,37 +6,39 @@
     card_view:cardCornerRadius="10dp"
     card_view:cardElevation="10dp"
     android:layout_height="wrap_content">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
+            android:id="@+id/postImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/postImage"
             android:padding="5dp"
             android:src="@drawable/placeholder" />
+
         <TextView
+            android:id="@+id/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Name"
-            android:id="@+id/header"
-            android:padding="10dp"
-            android:textColor="@color/colorAccent"
             android:layout_below="@+id/postImage"
             android:layout_alignParentLeft="true"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Name"
-            android:id="@+id/abs"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:text="Name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/abs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/header"
             android:layout_alignParentLeft="true"
-            />
+            android:padding="10dp"
+            android:text="Name"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/black" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
