@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
                 if(mFirebaseUser != null)
                 {
-                    Toast.makeText(MainActivity.this,"Giriş başarili",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MainActivity.this,"Giriş başarili",Toast.LENGTH_LONG).show();
                     Intent i = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(i);
                 }

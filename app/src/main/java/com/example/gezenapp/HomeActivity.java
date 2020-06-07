@@ -1,12 +1,22 @@
 package com.example.gezenapp;
 
 
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,16 +27,31 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener{
@@ -38,9 +63,14 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
     //ImageView image;
     RecyclerView recyclerView;
     MyRecyclerViewAdapter adapter;
+    TextView navDisplayName;
+    ImageView navImage;
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+
+
+    StorageReference storageReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +79,7 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
         header = (TextView) findViewById(R.id.header);
         abs = (TextView) findViewById(R.id.abs);
         //image = (ImageView) findViewById(R.id.postImage);
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -84,6 +115,8 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -97,7 +130,7 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
 
                      FirebaseAuth.getInstance().signOut();
                      Intent iMain = new Intent(HomeActivity.this, MainActivity.class);
-                      startActivity(iMain);
+                     startActivity(iMain);
 
                 }else  if (id == R.id.home){
 
@@ -105,15 +138,63 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
 
                 }else if (id == R.id.profile){
 
-                    Toast.makeText(HomeActivity.this,"Profile",Toast.LENGTH_SHORT);
-
+                    //Toast.makeText(HomeActivity.this,"Profile",Toast.LENGTH_SHORT);
+                    Intent iHome = new Intent(HomeActivity.this,ProfileActivity.class);
+                    startActivity(iHome);
                 }
                 return true;
             }
-        })
-        ;
+        });
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null ) {
+            for (UserInfo profile : user.getProviderData()) {
+                String name = profile.getDisplayName();
+                Uri photoUrl = profile.getPhotoUrl();
+
+                View header = navigationView.getHeaderView(0);
+                navDisplayName = (TextView) header.findViewById(R.id.nav_text);
+                navImage = (ImageView) header.findViewById(R.id.nav_pic);
+
+                if (name != null)
+                {
+                    navDisplayName.setText(name);
+
+                } else
+                {
+                    navDisplayName.setText("Bilinmeyen Kullanici");
+                }
+                if (photoUrl != null)
+                {
 
 
+                    // Create a storage reference from our app
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+                    // Create a reference with an initial file path and name
+                    StorageReference pathReference = storageRef.child("images/"+photoUrl.getLastPathSegment().toString());
+
+                    Log.d("TAG", "onFailure: "+pathReference);
+
+                    final long ONE_MEGABYTE = 1024 * 1024 * 4;
+                    pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            navImage.setImageBitmap(bitmap);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                            Log.d("TAG", "onFailure: "+exception.getMessage());
+                        }
+                    });
+
+                }
+            }
+        }
+        //Navigation
     }
 
     @Override
