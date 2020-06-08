@@ -1,113 +1,61 @@
 package com.example.gezenapp;
 
-
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Registry;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+public class postDetailActivity extends AppCompatActivity {
+    TextView header,ctx;
+    ImageView   imageView;
 
-
-public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener{
-    private DatabaseReference mDatabase;
-    //CardView cardView;
-    TextView header;
-    TextView abs;
-    List<Post> posts = new ArrayList<>();
-    //ImageView image;
-    RecyclerView recyclerView;
-    MyRecyclerViewAdapter adapter;
     TextView navDisplayName;
     ImageView navImage;
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
-
-    StorageReference storageReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        //cardView = (CardView) findViewById(R.id.cardView);
-        header = (TextView) findViewById(R.id.header);
-        abs = (TextView) findViewById(R.id.abs);
-        //image = (ImageView) findViewById(R.id.postImage);
+        setContentView(R.layout.activity_post_detail);
+
+        header = (TextView) findViewById(R.id.detHeader);
+        ctx = (TextView) findViewById(R.id.detContent);
+        imageView = (ImageView) findViewById(R.id.detImage);
 
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String head = extras.getString("header");
+            String content = extras.getString("ctx");
+            String url = extras.getString("image");
 
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Post post = postSnapshot.getValue(Post.class);
-                    posts.add(post);
 
-                }
-
-                recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-                recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-                adapter = new MyRecyclerViewAdapter(recyclerView.getContext(), posts);
-                adapter.setClickListener((MyRecyclerViewAdapter.ItemClickListener) recyclerView.getContext());
-                recyclerView.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("TAG", "Failed to read value.", error.toException());
-            }
-        });
+            header.setText(head);
+            ctx.setText(content);
+        }
 
 
         //Navigation
@@ -130,18 +78,19 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
 
                 if (id == R.id.cikisyap){
 
-                     FirebaseAuth.getInstance().signOut();
-                     Intent iMain = new Intent(HomeActivity.this, MainActivity.class);
-                     startActivity(iMain);
+                    FirebaseAuth.getInstance().signOut();
+                    Intent iMain = new Intent(postDetailActivity.this, MainActivity.class);
+                    startActivity(iMain);
 
                 }else  if (id == R.id.home){
 
-                    Toast.makeText(HomeActivity.this,"Buradasin!",Toast.LENGTH_SHORT).show();
+                    Intent iMain = new Intent(postDetailActivity.this, MainActivity.class);
+                    startActivity(iMain);
 
                 }else if (id == R.id.profile){
 
-                    //Toast.makeText(HomeActivity.this,"Profile",Toast.LENGTH_SHORT);
-                    Intent iHome = new Intent(HomeActivity.this,ProfileActivity.class);
+                    //Toast.makeText(postDetailActivity.this,"Profile",Toast.LENGTH_SHORT);
+                    Intent iHome = new Intent(postDetailActivity.this,ProfileActivity.class);
                     startActivity(iHome);
                 }
                 return true;
@@ -198,15 +147,6 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
         }
         //Navigation
 
-        FloatingActionButton fab = findViewById(R.id.addPost);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addPost = new Intent(HomeActivity.this, addPost.class);
-                startActivity(addPost);
-            }
-        });
-
     }
 
     @Override
@@ -214,14 +154,4 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
         return actionBarDrawerToggle.onOptionsItemSelected(item) ||  super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-
-        Intent i = new Intent(HomeActivity.this, postDetailActivity.class);
-        i.putExtra("header", posts.get(position).getHeader());
-        i.putExtra("ctx", posts.get(position).getContext());
-        i.putExtra("image", posts.get(position).getImageUrl());
-
-        view.getContext().startActivity(i);
-    }
 }

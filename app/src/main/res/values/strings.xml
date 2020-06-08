@@ -18,4 +18,5 @@
     <string name="Close">Navbar</string>
     <string name="todo">TODO</string>
     <string name="bilinmeyen_kullanici">Bilinmeyen Kullanici</string>
+    <string name="submit">submit</string>
 </resources>

@@ -1,15 +1,36 @@
 package com.example.gezenapp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Post {
 
-    public Post() {
-    }
+    public Map<String, Boolean> stars = new HashMap<>();
 
     private String header;
 
     private String context;
 
     private String imageUrl;
+
+    public Post() {
+    }
+
+    public Post(String header, String context, String imageUrl) {
+
+        this.header = header;
+        this.context = context;
+        this.imageUrl = imageUrl;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("header", header);
+        result.put("context", context);
+        result.put("imageUrl", imageUrl);
+
+        return result;
+    }
 
     public String getHeader() {
         return header;

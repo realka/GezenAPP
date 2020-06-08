@@ -1,9 +1,12 @@
 package com.example.gezenapp;
 
 import android.content.Context;
+import android.media.Image;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +41,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.header.setText(title);
         String cont = mData.get(position).getContext();
         holder.abs.setText(cont);
+        //holder.imageView.setImageURI(Uri.parse(mData.get(position).getImageUrl()));
     }
 
     // total number of rows
@@ -51,11 +55,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView header;
         TextView abs;
+        ImageView   imageView;
 
         ViewHolder(View itemView) {
             super(itemView);
             header = itemView.findViewById(R.id.header);
             abs =itemView.findViewById(R.id.abs);
+            imageView =itemView.findViewById(R.id.postImage);
             itemView.setOnClickListener(this);
         }
 
