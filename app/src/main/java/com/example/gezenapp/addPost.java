@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -81,7 +82,6 @@ public class addPost extends AppCompatActivity {
             public void onClick(View v)
             {
                 SelectImage();
-                imageUrl = uploadImage();
             }
         });
 
@@ -92,6 +92,7 @@ public class addPost extends AppCompatActivity {
             {
                 postHeader = header.getText().toString();
                 postContent = ctx.getText().toString();
+                imageUrl = uploadImage();
                 writeNewPost(postHeader, postContent, imageUrl);
             }
         });
@@ -251,7 +252,7 @@ public class addPost extends AppCompatActivity {
     // UploadImage method
     private String uploadImage()
     {
-        Log.d("TAG", "hatamivar: ");
+        StorageReference storageReference2 = FirebaseStorage.getInstance().getReference();
         String picName = null;
         if (filePath != null) {
 
@@ -262,8 +263,6 @@ public class addPost extends AppCompatActivity {
             progressDialog.show();
 
             // Defining the child of storageReference
-
-            storageReference2 = FirebaseStorage.getInstance().getReference();
             StorageReference ref
                     = storageReference2
                     .child(
@@ -284,13 +283,11 @@ public class addPost extends AppCompatActivity {
                                     // Image uploaded successfully
                                     // Dismiss dialog
                                     progressDialog.dismiss();
-                                    Toast
-                                            .makeText(addPost.this,
+                                    /*Toast
+                                            .makeText(com.example.gezenapp.addPost.this,
                                                     "Image Uploaded!!",
                                                     Toast.LENGTH_SHORT)
-                                            .show();
-
-                                    Log.d("TAG", "hatamivar: "+"succsess");
+                                            .show();*/
                                 }
                             })
 
@@ -302,11 +299,10 @@ public class addPost extends AppCompatActivity {
                             // Error, Image not uploaded
                             progressDialog.dismiss();
                             Toast
-                                    .makeText(addPost.this,
+                                    .makeText(com.example.gezenapp.addPost.this,
                                             "Failed - " + e.getMessage(),
                                             Toast.LENGTH_SHORT)
                                     .show();
-                            Log.d("TAG", "hatamivar: "+e.getMessage());
                         }
                     })
                     .addOnProgressListener(
@@ -329,8 +325,6 @@ public class addPost extends AppCompatActivity {
                             });
 
         }
-
-        Log.d("TAG", "hatamivar: "+picName);
         return picName;
     }
     private void writeNewPost(String postHeader, String postContent, String imageUrl) {

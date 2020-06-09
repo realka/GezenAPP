@@ -2,6 +2,7 @@ package com.example.gezenapp;
 
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +11,18 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +73,7 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
     MyRecyclerViewAdapter adapter;
     TextView navDisplayName;
     ImageView navImage;
+    EditText editText;
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -206,7 +213,40 @@ public class HomeActivity extends AppCompatActivity implements MyRecyclerViewAda
                 startActivity(addPost);
             }
         });
+        editText = (EditText) findViewById(R.id.editTextSearch);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                filter(editable.toString());
+            }
+        });
+    }
+    private void filter(String text) {
+        //new array list that will hold the filtered data
+        ArrayList<Post> filteredContent = new ArrayList<>();
+
+        //looping through existing elements
+        for (Post s : posts) {
+            //if the existing elements contains the search input
+            if (s.getContext().toLowerCase().contains(text.toLowerCase()) || s.getHeader().toLowerCase().contains(text.toLowerCase())) {
+                //adding the element to filtered list
+                filteredContent.add(s);
+            }
+        }
+
+        //calling a method of the adapter class and passing the filtered list
+        adapter.filterlist(filteredContent);
     }
 
     @Override

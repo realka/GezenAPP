@@ -1,18 +1,28 @@
 package com.example.gezenapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
@@ -41,13 +51,57 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.header.setText(title);
         String cont = mData.get(position).getContext();
         holder.abs.setText(cont);
-        //holder.imageView.setImageURI(Uri.parse(mData.get(position).getImageUrl()));
+
+        // Create a storage reference from our app
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+        // Create a reference with an initial file path and name
+        //String[] separated = mData.get(position).getImageUrl().split("/");
+        Uri imageURL = Uri.parse(mData.get(position).getImageUrl());
+
+        StorageReference pathReference =
+                storageRef.child("images/"+
+                imageURL.getLastPathSegment());
+        //StorageReference pathReference = storageRef.child("images/"+mData.get(position).getImageUrl());
+
+        Log.d("TAG", "Adapter: "+pathReference);
+
+        final long ONE_MEGABYTE = 1024 * 1024 * 4;
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                holder.imageView.setImageBitmap(bitmap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                Log.d("TAG", "Adapter: "+exception.getMessage() +"->"+mData.get(position).getImageUrl());
+            }
+        });
+
+        new CountDownTimer(5000, 1000) {
+            public void onFinish() {
+                // When timer is finished
+                // Execute your code here
+            }
+
+            public void onTick(long millisUntilFinished) {
+                // millisUntilFinished    The amount of time until finished.
+            }
+        }.start();
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public void filterlist(ArrayList<Post> filteredContent) {
+        this.mData = filteredContent;
+        notifyDataSetChanged();
     }
 
 
@@ -85,4 +139,5 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }
+
 }

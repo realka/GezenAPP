@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -199,6 +200,16 @@ public class ProfileActivity extends AppCompatActivity {
                 if (photoUrl != null)
                 {
 
+                    new CountDownTimer(5000, 1000) {
+                        public void onFinish() {
+                            // When timer is finished
+                            // Execute your code here
+                        }
+
+                        public void onTick(long millisUntilFinished) {
+                            // millisUntilFinished    The amount of time until finished.
+                        }
+                    }.start();
 
                     // Create a storage reference from our app
                     StorageReference storageRef = FirebaseStorage.getInstance().getReference();

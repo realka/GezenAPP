@@ -55,6 +55,34 @@ public class postDetailActivity extends AppCompatActivity {
 
             header.setText(head);
             ctx.setText(content);
+
+            // Create a storage reference from our app
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+            // Create a reference with an initial file path and name
+            //String[] separated = mData.get(position).getImageUrl().split("/");
+            Uri imageURL = Uri.parse(url);
+
+            StorageReference pathReference =
+                    storageRef.child("images/"+
+                            imageURL.getLastPathSegment());
+
+            Log.d("TAG", "onFailure: "+pathReference);
+
+            final long ONE_MEGABYTE = 1024 * 1024 * 4;
+            pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    imageView.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    Log.d("TAG", "Adapter: "+exception.getMessage() +"->"+url);
+                }
+            });
         }
 
 

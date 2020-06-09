@@ -13,10 +13,11 @@
 
         <ImageView
             android:id="@+id/postImage"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:src="@drawable/placeholder" />
+            android:src="@drawable/placeholder"
+            />
 
         <TextView
             android:id="@+id/header"
